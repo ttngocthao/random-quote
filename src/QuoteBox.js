@@ -11,6 +11,8 @@ class QuoteBox extends React.Component {
       author: []
     };
     this.clickHandle = this.clickHandle.bind(this);
+    this.randomNum = this.randomNum.bind(this);
+    this.randomColor = this.randomColor.bind(this);
   }
   componentDidMount() {
     fetch(
@@ -29,35 +31,39 @@ class QuoteBox extends React.Component {
         // console.log(this.state.quote[9]);
       });
   }
-
+  randomNum(i) {
+    return Math.floor(Math.random() * i);
+  }
   clickHandle() {
     this.setState({
-      index: Math.floor(Math.random() * 102)
+      index: this.randomNum(102)
     });
   }
+  randomColor() {
+    const hue = this.randomNum(360);
+    const sat = this.randomNum(100);
+    const light = this.randomNum(100);
+    return `hsl(${hue},${sat}%,${light}%)`;
+  }
   render() {
-    const randomNoOnLoad = Math.floor(Math.random() * 102);
-    function randomColor() {
-      function randomNo() {
-        return Math.floor(Math.random() * 255);
-      }
-      return `rgb(${randomNo()},${randomNo()},${randomNo()})`;
-    }
+    const randomNoOnLoad = this.randomNum(102);
+
+    let bkgColor = this.randomColor();
+
     let quoteBoxStyle = {
-      backgroundColor: randomColor(),
-      height: "100vh"
+      backgroundColor: bkgColor
     };
 
     return (
       <div id="quote-box" style={quoteBoxStyle}>
         <h1>Random Quote Machine</h1>
+        <button id="new-quote-btn" onClick={this.clickHandle}>
+          Next Quote
+        </button>
         <Quote
           quote={this.state.quote[randomNoOnLoad]}
           author={this.state.author[randomNoOnLoad]}
         />
-        <button id="new-quote" onClick={this.clickHandle}>
-          Next Quote
-        </button>
       </div>
     );
   }
